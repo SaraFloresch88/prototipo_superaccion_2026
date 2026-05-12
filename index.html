@@ -2,62 +2,186 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Estudio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pomodoro</title>
 
 <style>
+
 body{
     margin:0;
+    font-family:Arial,sans-serif;
+    overflow:hidden;
+}
+
+/* PANTALLAS */
+
+.screen{
+    width:100vw;
     height:100vh;
-    display:flex;
+    display:none;
+
     justify-content:center;
     align-items:center;
     flex-direction:column;
-    background:#1e293b;
-    color:white;
-    font-family:Arial;
+
+    transition:0.5s;
 }
 
-#timer{
-    font-size:6rem;
+.active{
+    display:flex;
 }
+
+/* ESTUDIO */
+
+#studyScreen{
+    background:#1e293b;
+    color:white;
+}
+
+/* DESCANSO */
+
+#breakScreen{
+    background:#dbeafe;
+    color:#111827;
+}
+
+h1{
+    font-size:4rem;
+    margin-bottom:20px;
+}
+
+.timer{
+    font-size:7rem;
+    font-weight:bold;
+}
+
+.subtitle{
+    margin-top:20px;
+    font-size:1.5rem;
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>Tiempo de estudio</h1>
-<div id="timer">25:00</div>
+<!-- ESTUDIO -->
+
+<div id="studyScreen" class="screen active">
+
+    <h1>Tiempo de estudio</h1>
+
+    <div id="studyTimer" class="timer">
+        25:00
+    </div>
+
+    <div class="subtitle">
+        Concéntrate en tus tareas
+    </div>
+
+</div>
+
+<!-- DESCANSO -->
+
+<div id="breakScreen" class="screen">
+
+    <h1>Tiempo de descanso</h1>
+
+    <div id="breakTimer" class="timer">
+        05:00
+    </div>
+
+    <div class="subtitle">
+        Relájate un momento ☕
+    </div>
+
+</div>
 
 <script>
 
-let timeLeft = 25 * 60;
+/* TIEMPOS */
 
-const timer = document.getElementById("timer");
+const STUDY_TIME = 25 * 60;
+const BREAK_TIME = 5 * 60;
 
-function updateTimer(){
+/* ELEMENTOS */
 
-    let minutes = Math.floor(timeLeft / 60);
-    let seconds = timeLeft % 60;
+const studyScreen = document.getElementById("studyScreen");
+const breakScreen = document.getElementById("breakScreen");
 
-    if(seconds < 10){
-        seconds = "0" + seconds;
+const studyTimer = document.getElementById("studyTimer");
+const breakTimer = document.getElementById("breakTimer");
+
+/* VARIABLES */
+
+let timeLeft = STUDY_TIME;
+let isStudy = true;
+
+/* FORMATO */
+
+function formatTime(seconds){
+
+    let mins = Math.floor(seconds / 60);
+    let secs = seconds % 60;
+
+    if(secs < 10){
+        secs = "0" + secs;
     }
 
-    timer.innerText = minutes + ":" + seconds;
+    return mins + ":" + secs;
+}
 
-    if(timeLeft <= 0){
+/* ACTUALIZAR */
 
-        window.location.href = "break.html";
+function update(){
 
+    if(isStudy){
+
+        studyTimer.innerText = formatTime(timeLeft);
+
+    }else{
+
+        breakTimer.innerText = formatTime(timeLeft);
     }
 
     timeLeft--;
 
+    if(timeLeft < 0){
+
+        switchMode();
+    }
 }
 
-updateTimer();
+/* CAMBIAR MODO */
 
-setInterval(updateTimer,1000);
+function switchMode(){
+
+    if(isStudy){
+
+        isStudy = false;
+
+        timeLeft = BREAK_TIME;
+
+        studyScreen.classList.remove("active");
+        breakScreen.classList.add("active");
+
+    }else{
+
+        isStudy = true;
+
+        timeLeft = STUDY_TIME;
+
+        breakScreen.classList.remove("active");
+        studyScreen.classList.add("active");
+    }
+}
+
+/* INICIAR */
+
+update();
+
+setInterval(update,1000);
 
 </script>
 
