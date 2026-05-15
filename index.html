@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cognify</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilo.css">
+
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Cognify</div>
+    <div class="toggle" onclick="toggleDark()">
+        <div class="circle"></div>
+    </div>
+</header>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="screen active">
+    <h1 class="section-title">Frase del día</h1>
+    <div class="quote-box">
+        <div class="quote">
+            La magia es creer en ti mismo.
+            Si puedes hacer eso,
+            puedes hacer que suceda cualquier cosa.
+        </div>
+        <div class="author">
+            - Johann Wolfgang von Goethe
+        </div>
+    </div>
+    <h1 class="section-title">Línea del tiempo</h1>
+    <button class="button" onclick="toggleCompleted()">Ver tareas realizadas</button>
+    <br><br>
+    <div class="timeline">
+        <!-- LUNES -->
+        <div class="day">Lunes, 25 Mayo 2026</div>
+        <div class="task" id="task-Tarea 1" onclick="openTask('Tarea 1','Matemática C5',40)">
+            <div class="task-icon">📘</div>
+            <div class="time">22:00</div>
+            <div class="task-info">
+                <h3>Tarea 1</h3>
+                <p>Matemática C5</p>
+            </div>
+            <div class="estimation">
+                <h4>Estimación temporal</h4>
+                <p>40 minutos</p>
+            </div>
+        </div>
+        <div class="task" id="task-Ensayo" onclick="openTask('Ensayo','Literatura C5',300)">
+            <div class="task-icon">📘</div>
+            <div class="time">22:00</div>
+            <div class="task-info">
+                <h3>Ensayo</h3>
+                <p>Literatura C5</p>
+            </div>
+            <div class="estimation">
+                <h4>Estimación temporal</h4>
+                <p>5 horas</p>
+            </div>
+        </div>
+
+        <!-- MARTES -->
+        <div class="day">Martes, 26 Mayo 2026</div>
+        <div class="task" id="task-Examen parcial" onclick="openTaskExam('Examen parcial','Química C5',40)">
+            <div class="task-icon">📅</div>
+            <div class="time">8:20</div>
+            <div class="task-info">
+                <h3>Examen parcial</h3>
+                <p>Química C5</p>
+            </div>
+            <div class="estimation">
+                <h4>Estimación temporal</h4>
+                <p>40 minutos</p>
+            </div>
+        </div>
+        <div class="task" id="task-Comprobacion de lectura" onclick="openTaskExam('Comprobación de lectura','Literatura C5',40)">
+            <div class="task-icon">📖</div>
+            <div class="time">11:00</div>
+            <div class="task-info">
+                <h3>Comprobación de lectura</h3>
+                <p>Literatura C5</p>
+            </div>
+            <div class="estimation">
+                <h4>Estimación temporal</h4>
+                <p>40 minutos</p>
+            </div>
+        </div>
+        <div class="task" id="task-Tarea flotabilidad" onclick="openTask('Tarea Flotabilidad','Física C5',60)">
+            <div class="task-icon">📘</div>
+            <div class="time">22:00</div>
+            <div class="task-info">
+                <h3>Tarea Flotabilidad</h3>
+                <p>Física C5</p>
+            </div>
+            <div class="estimation">
+                <h4>Estimación temporal</h4>
+                <p>1 hora</p>
+            </div>
+        </div>
+
+        <!-- MIERCOLES -->
+        <div class="day">Miércoles, 27 Mayo 2026</div>
+        <div class="task" id="task-Quick sort" onclick="openTask('Quick Sort','Computación C5',90)">
+            <div class="task-icon">📘</div>
+            <div class="time">20:00</div>
+            <div class="task-info">
+                <h3>Quick Sort</h3>
+                <p>Computación C5</p>
+            </div>
+            <div class="estimation">
+                <h4>Estimación temporal</h4>
+                <p>1 hora y 30 minutos</p>
+            </div>
+        </div>
+        <div class="task" id="task-Online practices" onclick="openTask('Online practices','Inglés EI C5',40)">
+            <div class="task-icon">📘</div>
+            <div class="time">22:00</div>
+            <div class="task-info">
+                <h3>Online practices</h3>
+                <p>Inglés EI C5</p>
+            </div>
+            <div class="estimation">
+                <h4>Estimación temporal</h4>
+                <p>40 minutos</p>
+            </div>
+        </div>
+    </div>
+        <div id="completedSection" style="display:none; margin-top:40px;">
+        <h1 class="section-title">Actividades realizadas</h1>
+        <div id="completedList"></div>
+    </div>
+</section>
+
+<!-- Iniciar SESION -->
+<section id="startSession" class="screen">
+    <div id="sessionContent"></div>
+</section>
+
+<!-- Estudio -->
+<section id="study" class="screen">
+    <h1 class="study-title">Tarea</h1>
+    <p class="study-description">Concéntrate únicamente en esta actividad.</p>
+    <div class="timer" id="studyTimer">25:00</div>
+    <div class="button-group" id="studyButtons"></div>
+    <div id="uploadMessage"></div>
+    <div id="studyContent"></div>
+</section>
+
+
+<!-- BREAK -->
+<section id="break" class="screen">
+    <div class="break-container">
+        <div class="break-card">
+            <h1 class="break-title">
+                Descansa 5 minutos
+            </h1>
+            <div class="timer" id="breakTimer">
+                05:00
+            </div>
+            <p class="break-text">
+                El descanso es importante para rendir a tu máximo nivel
+            </p>
+        </div>
+    </div>
+</section>
+
+
+
+<section id="confirmExit" class="screen">
+    <div class="break-container">
+        <div class="break-card">
+            <h1 class="break-title">¿Estás segura?</h1>
+            <p class="break-text">
+                La perseverancia es lo que convierte
+                el esfuerzo en resultados.
+            </p>
+            <br><br>
+            <div class="button-group">
+                <button class="button" onclick="finishSession()">Terminar sesión</button>
+                <button class="button" onclick="continueSession()">Continuar sesión</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+/*---------------- DARK MODE ---------------- */
+function toggleDark(){
+    document.body.classList.toggle("dark");
+}
+
+/*-------- Submit task -------------------------*/
+function uploadTask(event){
+    const file = event.target.files[0];
+    if(file){
+        completeActivity(currentTask);
+        document.getElementById("uploadMessage").innerHTML = `<div class="file-message">Archivo enviado correctamente:<strong>${file.name}</strong></div>
+        `;
+    }
+}
+
+/*----------- COntinue or stop task ----------*/
+
+function finishSession(){
+
+    clearInterval(studyInterval);
+    clearInterval(breakInterval);
+
+    showScreen("dashboard");
+}
+
+function continueSession(){
+
+    showScreen("study");
+}
+
+function completeActivity(activityName){
+    const task = document.getElementById(
+        `task-${activityName}`
+    );
+    if(task){
+        task.style.display = "none";
+    }
+    completedActivities[activityName] = {
+        subject: currentSubject,
+        type: isExam
+        ? "Examen"
+        : "Tarea",
+        completedAt:new Date().toLocaleString()
+    };
+    renderCompleted();
+}
+
+/* ---------------- NAVIGATION ---------------- */
+function showScreen(screenId){
+    const screens = document.querySelectorAll(".screen");
+    screens.forEach(screen => {
+        screen.classList.remove("active");
+    });
+    document.getElementById(screenId).classList.add("active");
+}
+
+/* ---------------- TASKS ---------------- */
+let currentTask = "";
+let currentSubject = "";
+let currentMinutes = 0;
+let isExam = false;
+let selectedAnswers = {};
+let completedActivities = {};
+const activities = {
+    "Tarea 1":{
+        type:"task",
+        image:"https://i.ibb.co/RTjdt96k/img-mate.png",
+        description:"Resuelve los ejercicios de derivadas y simplificación algebraica."
+    },
+    "Ensayo":{
+        type:"task",
+        image:"https://i.ibb.co/VW1qcTVh/img-ensayo.png",
+        description:"Redacta un ensayo sobre el Modernismo y su impacto cultural."
+    },
+    "Tarea Flotabilidad":{
+        type:"task",
+        image:"https://imgv2-1-f.scribdassets.com/img/document/424094486/original/47e535371e/1?v=1",
+        description:"Resuelve problemas relacionados con flotabilidad y densidad."
+    },
+    "Quick Sort":{
+        type:"task",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF-6ZJuot8HOFV8EB8hUH7B7jXdlQuGkuPjQ&s",
+        description:"Implementa el algoritmo Quick Sort en Python."
+    },
+    "Online practices":{
+        type:"task",
+        image:"https://www.editorialmd.com/wp-content/uploads/Present-Simple-scaled.jpg",
+        description:
+        "Completa las online practices de gramática y reading."
+    },
+    "Examen parcial":{
+        type:"exam",
+        questions:[
+            {
+                question:"¿Qué elemento químico tiene símbolo O?",
+                options:["Oro","Oxígeno","Osmio","Hidrógeno"],
+                correct:"Oxígeno"
+            },
+            {
+                question:"¿Cuál es el pH aproximado del agua pura?",
+                options:["3","5","7","10"],
+                correct:"7"
+            }
+        ]
+    },
+    "Comprobación de lectura":{
+        type:"exam",
+        questions:[
+            {
+                question:"¿Quién escribió Don Quijote de la Mancha?",
+                options:["Gabriel García Márquez","Miguel de Cervantes","Pablo Neruda","Rubén Darío"],
+                correct:"Miguel de Cervantes"
+            },
+            {
+                question:"¿Qué caracteriza al Modernismo?",
+                options:["Realismo extremo","Belleza estética","Lenguaje científico","Narrativa histórica"],
+                correct:"Belleza estética"
+            }
+        ]
+    }
+};
+
+function loadTaskContent(){
+    const activity = activities[currentTask];
+    document.getElementById("studyContent").innerHTML = `
+        <p style="
+            font-size:1.5rem;
+            margin-bottom:30px;
+        ">${activity.description}</p>
+        <div class="exercise-box"><img src="${activity.image}"></div>
+    `;
+}
+
+function loadExamContent(){
+    selectedAnswers = {};
+    const activity =activities[currentTask];
+    let questionsHTML = "";
+    activity.questions.forEach((q,index)=>{
+        questionsHTML += `
+            <div class="question">
+                <h3>${index + 1}. ${q.question}</h3>
+        `;
+        q.options.forEach(option => {
+            questionsHTML += `
+                <div class="option" data-question="${index}" data-answer="${option}" ${option === q.correct ? 'data-correct="true"' : ''} onclick="selectAnswer(this)"> ${option} </div>
+`;
+        });
+        questionsHTML += `
+            </div>
+        `;
+    });
+    document.getElementById("studyContent").innerHTML = `
+    <div class="exam-container">
+        ${questionsHTML}
+        <div id="examResult"></div>
+    </div>
+`;
+}
+
+function selectAnswer(element){
+    const question = element.dataset.question;
+    const options = document.querySelectorAll(
+        `[data-question="${question}"]`
+    );
+    options.forEach(option => {option.classList.remove("selected")});
+    element.classList.add("selected");
+    selectedAnswers[question] = element.dataset.answer;
+}
+
+function submitExam(){
+    let score = 0;
+    const correctOptions = document.querySelectorAll("[data-correct='true']");
+    correctOptions.forEach(option => {
+        const question = option.dataset.question;
+        const correctAnswer = option.dataset.answer;
+        const selected = selectedAnswers[question];
+        if(selected === correctAnswer){
+            score++;
+            option.classList.add("correct");
+        }else{
+            option.classList.add("correct");
+            const selectedOption =
+            document.querySelector(
+                `[data-question="${question}"][data-answer="${selected}"]`
+            );
+            if(selectedOption){
+                selectedOption.classList.add("incorrect");
+            }
+        }
+    });
+    completeActivity(currentTask);
+    document.getElementById("examResult").innerHTML = `
+        <div class="file-message">
+            Examen enviado.<br><br>
+            Puntaje:<strong>${score}/2</strong>
+        </div>
+    `;
+}
+function renderCompleted(){
+    const container = document.getElementById("completedList");
+    let html = "";
+    for(const activity in completedActivities){
+        const data = completedActivities[activity];
+        html += `
+            <div class="task">
+                <div class="task-icon">
+                    ${data.type === "Examen"
+                    ? "📅"
+                    : "📘"}
+                </div>
+                <div class="task-info">
+                    <h3>${activity}</h3>
+                    <p>${data.subject}</p>
+                </div>
+                <div class="estimation">
+                    <h4>Completado</h4>
+                    <p>${data.completedAt}</p>
+                </div>
+            </div>
+        `;
+    }
+    container.innerHTML = html;
+}
+
+function toggleCompleted(){
+    const section = document.getElementById("completedSection");
+    if(section.style.display === "none"){
+        section.style.display = "block";
+        section.scrollIntoView({
+            behavior:"smooth"
+        });
+    }else{
+        section.style.display = "none";
+    }
+}
+
+function openTask(task,subject,minutes){
+    isExam = false;
+    currentTask = task;
+    currentSubject = subject;
+    currentMinutes = minutes;
+    const cycles = Math.ceil(minutes / 25);
+    document.getElementById("sessionContent").innerHTML = `
+        <div style="display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            height:100%;
+        ">
+            <h1 class="section-title">${task}</h1><p style="font-size:1.7rem;">${subject}</p><br><br><p style="font-size:1.4rem;">Esta sesión se dividirá en:</p><br><div class="phase-box"><div class="phase"><h2>Fase de estudio</h2><p>25 minutos</p></div><div class="phase"><h2>Descanso</h2><p>5 minutos</p></div></div><p style="font-size:1.5rem;">Se necesitarán aproximadamente<strong>${cycles}</strong>ciclos Pomodoro para completar esta actividad.</p><br><br><button class="button" onclick="startPomodoro()">Comenzar sesión</button></div>
+    `;
+    showScreen("startSession");
+}
+
+function openTaskExam(task,subject,minutes){
+
+    isExam = true;
+
+    currentTask = task;
+    currentSubject = subject;
+    currentMinutes = minutes;
+
+    document.getElementById("sessionContent").innerHTML = `
+
+        <div style="
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            height:100%;
+        ">
+
+            <h1 class="section-title">${task}</h1><p style="font-size:1.7rem;">${subject}</p><br><br><p style="font-size:1.5rem; max-width:700px;">
+                Este es un modo examen.
+                Tendrás un tiempo máximo de
+                <strong>${minutes} minutos</strong>para completar la actividad.
+            </p><br><br>
+            <button class="button" onclick="startPomodoro()">Comenzar examen</button></div>
+    `;
+    showScreen("startSession");
+}
+
+/* ---------------- TIMER ---------------- */
+const STUDY_TIME = 25 * 60;
+const BREAK_TIME = 5 * 60;
+let studySeconds = STUDY_TIME;
+let breakSeconds = BREAK_TIME;
+let studyInterval;
+let breakInterval;
+
+/* ---------------- START ---------------- */
+function startPomodoro(){
+    document.querySelector(".study-title").innerText =`${currentTask} - ${currentSubject}`;
+    const buttonContainer = document.getElementById("studyButtons");
+    if(isExam){
+        document.querySelector(".study-description").innerText = "Modo examen activo. El tiempo es limitado.";
+        buttonContainer.innerHTML = `
+            <button class="button" onclick="submitExam()">Enviar examen</button>
+            <button class="button" onclick="showScreen('confirmExit')">Terminar examen</button>
+        `;
+        loadExamContent();
+    }else{
+        document.querySelector(".study-description").innerText = "Concéntrate únicamente en esta actividad hasta finalizar la sesión.";
+        buttonContainer.innerHTML = `
+            <label class="button">Enviar tarea
+                <input type="file" hidden onchange="uploadTask(event)">
+            </label>
+            <button class="button" onclick="showScreen('confirmExit')">Terminar sesión</button>
+        `;
+        loadTaskContent();
+    }
+    showScreen("study");
+    document.getElementById("uploadMessage").innerHTML = "";
+    startStudy();
+}
+
+/* ---------------- STUDY ---------------- */
+function startStudy(){
+    clearInterval(studyInterval);
+    studySeconds = STUDY_TIME;
+    updateStudy();
+    studyInterval = setInterval(() => {
+        studySeconds--;
+        updateStudy();
+        if(studySeconds <= 0){
+            clearInterval(studyInterval);
+            startBreak();
+        }
+    },1000);
+}
+
+function updateStudy(){
+    const minutes = Math.floor(studySeconds / 60);
+    const seconds = studySeconds % 60;
+    document.getElementById("studyTimer").innerText =
+    `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
+
+/* ---------------- BREAK ---------------- */
+function startBreak(){
+    showScreen("break");
+    clearInterval(breakInterval);
+    breakSeconds = BREAK_TIME;
+    updateBreak();
+    breakInterval = setInterval(() => {
+        breakSeconds--;
+        updateBreak();
+        if(breakSeconds <= 0){
+            clearInterval(breakInterval);
+            showScreen("study");
+            startStudy();
+        }
+    },1000);
+}
+
+function updateBreak(){
+    const minutes = Math.floor(breakSeconds / 60);
+    const seconds = breakSeconds % 60;
+    document.getElementById("breakTimer").innerText =
+    `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
+
+</script>
+</body>
+</html>
